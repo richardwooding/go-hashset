@@ -2,6 +2,8 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/richardwooding/go-hashset.svg)](https://pkg.go.dev/github.com/richardwooding/go-hashset)
 
+**Website:** [richardwooding.github.io/go-hashset](https://richardwooding.github.io/go-hashset/)
+
 Hash **allowlist / denylist** lookup for forensic and security workflows — filter
 known-good files against an [NSRL](https://www.nist.gov/itl/ssd/software-quality-group/national-software-reference-library-nsrl)
 reference set, or flag known-bad hashes from a threat-intel feed. MD5, SHA-1,
