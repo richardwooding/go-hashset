@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>go-hashset — hash allow/deny lookup at NSRL scale</title>
+<meta name="description" content="Filter known-good files against an NSRL reference set, or flag known-bad hashes from a threat-intel feed — one Set interface over a fast in-memory store or a bbolt-backed store for tens of millions of MD5 / SHA-1 / SHA-256 entries.">
+<meta property="og:title" content="go-hashset">
+<meta property="og:description" content="Hash allow/deny lookup at NSRL scale — one Set interface over an in-memory or bbolt-backed store. MD5, SHA-1, SHA-256.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%23161b22'/><rect x='5' y='12' width='3.5' height='7' rx='1' fill='%23a371f7'/><rect x='10.25' y='8' width='3.5' height='11' rx='1' fill='%23bd93ff'/><rect x='15.5' y='4' width='3.5' height='15' rx='1' fill='%23d2b3ff'/></svg>">
+<script>try{var t=localStorage.getItem("gl-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="stylesheet" href="gloam.css">
+</head>
+<body class="gl">
+<a class="gl-skip" href="#main">Skip to content</a>
+
+<header class="gl-nav">
+  <div class="gl-wrap">
+    <span class="gl-brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <rect width="24" height="24" rx="6" fill="var(--gl-panel-2)"/>
+        <rect x="5" y="12" width="3.5" height="7" rx="1" fill="var(--gl-accent)"/>
+        <rect x="10.25" y="8" width="3.5" height="11" rx="1" fill="var(--gl-accent-2)"/>
+        <rect x="15.5" y="4" width="3.5" height="15" rx="1" fill="#d2b3ff"/>
+      </svg>
+      go-hashset
+    </span>
+    <button class="gl-nav-toggle" aria-label="Toggle navigation" data-gl-nav-toggle="nav" aria-expanded="false">☰</button>
+    <nav id="nav">
+      <a href="#features">Features</a>
+      <a href="#usage">Usage</a>
+      <a href="#install">Install</a>
+      <button class="gl-theme-toggle" data-gl-theme-toggle aria-label="Toggle color theme" aria-pressed="true">
+        <svg class="gl-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="gl-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+      </button>
+      <a class="gl-btn ghost" href="https://github.com/richardwooding/go-hashset">GitHub ★</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="gl-hero">
+    <div class="gl-wrap gl-hero-grid">
+      <div>
+        <p class="gl-eyebrow">go · md5 / sha-1 / sha-256 · nsrl-scale</p>
+        <h1>Hash allow/deny lookup, <span class="gl-grad">at NSRL scale.</span></h1>
+        <p class="sub">Filter known-good files against an NSRL reference set, or flag known-bad hashes from a threat-intel feed — one <code>Set</code> interface over a fast in-memory store or a bbolt-backed store for tens of millions of entries.</p>
+        <div class="gl-cta">
+          <a class="gl-btn primary" href="#install">Install</a>
+          <a class="gl-btn ghost" href="https://pkg.go.dev/github.com/richardwooding/go-hashset">Go Reference</a>
+        </div>
+        <p class="gl-hint">MIT licensed · single dependency (bbolt) · MD5 · SHA-1 · SHA-256</p>
+      </div>
+      <div class="gl-term">
+        <div class="bar">
+          <span class="dot" style="background:#ff5f56"></span>
+          <span class="dot" style="background:#ffbd2e"></span>
+          <span class="dot" style="background:#27c93f"></span>
+          <span class="t">hashset.go</span>
+        </div>
+<pre><span class="n">set</span>, _ := hashset.LoadTextFile(<span class="ok">"known-bad.txt"</span>)
+defer set.Close()
+
+if set.Contains(<span class="ok">"sha256"</span>, digest) {
+    <span class="hd">// flag it</span>
+}
+fmt.Println(set.Counts()) <span class="hd">// map[md5:… sha1:… sha256:…]</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="gl-section" id="features">
+    <div class="gl-wrap">
+      <p class="gl-eyebrow">what you get</p>
+      <h2>One Set interface, allow or deny.</h2>
+      <p class="gl-lede" style="margin-top:14px">The same store powers NSRL known-good filtering and known-bad flagging — from a one-off text list to a fifty-million-entry on-disk database.</p>
+      <div class="gl-grid feat" style="margin-top:32px">
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Allow and deny in one API</h3>
+          <p>The same <code>Set</code> backs both allowlist (NSRL known-good) and denylist (known-bad) workflows — the difference is your data, not your code.</p>
+        </div>
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>MD5, SHA-1, SHA-256</h3>
+          <p>The algorithm is auto-detected by hash length — 32, 40, or 64 hex characters — so mixed lists just work.</p>
+        </div>
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>Two backends</h3>
+          <p>A fast in-memory store (~1M entries, O(1)) or a bbolt-backed on-disk store (~50M NSRL-scale, O(log N)) — same lookups either way.</p>
+        </div>
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h9"/><path d="M17 16l3 3-3 3"/></svg></span>Ingests real lists</h3>
+          <p>Reads plain text hash lists — with <code>#</code> comments and mixed algorithms — and NSRL <code>NSRLFile.txt</code> quoted-CSV.</p>
+        </div>
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v10M8 9l4 4 4-4"/><path d="M5 17a7 7 0 0 0 14 0"/></svg></span>Auto-detecting <code>Open</code></h3>
+          <p><code>Open(path)</code> picks the backend straight from the file — a bbolt database or a text list — so callers don't have to choose.</p>
+        </div>
+
+        <div class="gl-card">
+          <h3><span class="gl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6"/></svg></span>Lean</h3>
+          <p>A single dependency (<code>go.etcd.io/bbolt</code>), with progress callbacks during builds so long ingests stay observable.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="gl-section" id="usage">
+    <div class="gl-wrap">
+      <p class="gl-eyebrow">usage</p>
+      <h2>In-memory list, or NSRL on disk.</h2>
+      <p class="gl-lede" style="margin-top:14px">Load a text list straight into memory for quick lookups, or build a bbolt database once and reopen it read-only for tens of millions of entries.</p>
+      <div class="gl-split" style="margin-top:28px">
+<pre class="gl-code"><span class="c">// In-memory — load a text list and query</span>
+set, err := hashset.LoadTextFile(<span class="s">"known-bad.txt"</span>)
+<span class="k">if</span> err != <span class="k">nil</span> { <span class="c">/* ... */</span> }
+<span class="k">defer</span> set.Close()
+
+<span class="k">if</span> set.Contains(<span class="s">"sha256"</span>, digest) {
+    <span class="c">// flag it</span>
+}</pre>
+<pre class="gl-code"><span class="c">// NSRL scale — build once, then open read-only</span>
+in, _ := os.Open(<span class="s">"NSRLFile.txt"</span>)
+<span class="k">defer</span> in.Close()
+_ = hashset.Build(in, <span class="s">"nsrl.hashset"</span>, hashset.BuildOpts{
+    Format:   <span class="s">"auto"</span>,
+    Progress: <span class="k">func</span>(n <span class="k">int64</span>) { log.Printf(<span class="s">"%d hashes"</span>, n) },
+})
+
+set, _ := hashset.OpenBolt(<span class="s">"nsrl.hashset"</span>)
+<span class="k">defer</span> set.Close()</pre>
+      </div>
+      <ul class="gl-badges" aria-label="API surface" style="margin-top:26px">
+        <li class="gl-lang">LoadTextFile</li>
+        <li class="gl-lang">LoadText</li>
+        <li class="gl-lang">Build</li>
+        <li class="gl-lang">OpenBolt</li>
+        <li class="gl-lang">Open</li>
+        <li class="gl-lang">Contains</li>
+        <li class="gl-lang">Counts</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="gl-section" id="install">
+    <div class="gl-wrap">
+      <p class="gl-eyebrow">install</p>
+      <h2>Add it to your module.</h2>
+      <p class="gl-lede" style="margin-top:14px">One import and a single transitive dependency (<code>go.etcd.io/bbolt</code>).</p>
+      <div class="gl-install" style="margin-top:26px">
+        <div class="gl-snip">
+          <span class="lbl">go get</span>
+          <code id="i1">go get github.com/richardwooding/go-hashset</code>
+          <button class="gl-copy" data-gl-copy="i1">Copy</button>
+        </div>
+        <div class="gl-snip">
+          <span class="lbl">import</span>
+          <code id="i2">import hashset "github.com/richardwooding/go-hashset"</code>
+          <button class="gl-copy" data-gl-copy="i2">Copy</button>
+        </div>
+      </div>
+      <p class="gl-hint">Extracted from <a href="https://github.com/richardwooding/file-search-on">file-search-on</a>, where it backs the known-good / known-bad search predicates. Full API on the <a href="https://pkg.go.dev/github.com/richardwooding/go-hashset">Go Reference</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="gl-footer">
+  <div class="gl-wrap">
+    <span class="gl-brand" style="font-size:.98rem">go-hashset · MIT · <span data-gl-year></span></span>
+    <nav class="gl-fnav">
+      <a href="https://richardwooding.github.io/">Richard Wooding</a>
+      <a href="https://github.com/richardwooding/go-hashset">GitHub</a>
+      <a href="https://pkg.go.dev/github.com/richardwooding/go-hashset">Go Reference</a>
+      <a href="https://github.com/richardwooding/go-hashset/blob/main/LICENSE">License</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="gloam.js" defer></script>
+</body>
+</html>
